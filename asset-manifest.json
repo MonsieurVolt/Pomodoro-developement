@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.53f4c59e.chunk.css",
+    "main.js": "/static/js/main.1fdc908c.chunk.js",
+    "main.js.map": "/static/js/main.1fdc908c.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.eb35c95e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.eb35c95e.js.map",
+    "static/js/2.5d37b9be.chunk.js": "/static/js/2.5d37b9be.chunk.js",
+    "static/js/2.5d37b9be.chunk.js.map": "/static/js/2.5d37b9be.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.53f4c59e.chunk.css.map": "/static/css/main.53f4c59e.chunk.css.map",
+    "static/js/2.5d37b9be.chunk.js.LICENSE.txt": "/static/js/2.5d37b9be.chunk.js.LICENSE.txt",
+    "static/media/arrow_down.52875a88.svg": "/static/media/arrow_down.52875a88.svg",
+    "static/media/arrow_up.0ea5cbdd.svg": "/static/media/arrow_up.0ea5cbdd.svg",
+    "static/media/pause.749bc999.svg": "/static/media/pause.749bc999.svg",
+    "static/media/play.506f6495.svg": "/static/media/play.506f6495.svg",
+    "static/media/reset.372b6a58.svg": "/static/media/reset.372b6a58.svg",
+    "static/media/App.css": "/static/media/sombre_nature.e1d6bbf5.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.eb35c95e.js",
+    "static/js/2.5d37b9be.chunk.js",
+    "static/css/main.53f4c59e.chunk.css",
+    "static/js/main.1fdc908c.chunk.js"
+  ]
+}
