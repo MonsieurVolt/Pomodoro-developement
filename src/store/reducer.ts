@@ -98,7 +98,6 @@ export const reducer = (
 				},
 			};
 		case SETTIMESEC:
-			console.log(state);
 			return {
 				...state,
 				time: {

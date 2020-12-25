@@ -1,6 +1,6 @@
 import React from "react";
-import arrowUp from "./assets/arrow_up.svg";
-import arrowDown from "./assets/arrow_down.svg";
+import { ReactComponent as ArrowUp } from "./assets/arrow_up.svg";
+import { ReactComponent as ArrowDown } from "./assets/arrow_down.svg";
 interface Props {
 	count: number;
 	handleChange: (up: boolean) => void;
@@ -13,23 +13,18 @@ const Controllers: React.FC<Props> = ({
 	name,
 }) => {
 	return (
-		<div id="session">
+		<div id={name}>
 			<>{children}</>
-			<div>
-				<button>
-					<img
-						src={arrowUp}
-						alt="up"
-						onClick={() => handleChange(true)}
-						id={name + "-increment"}
-					/>
+			<div className="arrow">
+				<button id={name + "-increment"} onClick={() => handleChange(true)}>
+					<ArrowUp />
 				</button>
 				<p id={name + "-length"}>{count}</p>
 				<button
 					onClick={() => handleChange(false)}
 					id={name + "-decrement"}
 				>
-					<img src={arrowDown} alt="down" />
+					<ArrowDown />
 				</button>
 			</div>
 		</div>

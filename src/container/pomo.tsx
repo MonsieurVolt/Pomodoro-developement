@@ -2,9 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { mapDispatchToProps, mapStateToProps } from "../store/connectors";
 import Timer from "./Timer";
-import playButton from "./assets/play.svg";
-import pauseButton from "./assets/pause.svg";
-import resetButton from "./assets/reset.svg";
+import { ReactComponent as PauseButton } from "./assets/pause.svg";
+import { ReactComponent as PlayButton } from "./assets/play.svg";
+import { ReactComponent as ResetButton } from "./assets/reset.svg";
 import Controller from "./Controllers";
 
 type handle = (sec: number, up: boolean) => void;
@@ -87,11 +87,11 @@ const Pomodoro: React.FC<Props> = ({
 			<div>
 				{play ? (
 					<button onClick={() => setPlay(false)} id="start_stop">
-						<img src={pauseButton} alt="pause" />
+						<PauseButton />
 					</button>
 				) : (
 					<button onClick={() => setPlay(true)} id="start_stop">
-						<img src={playButton} alt="play" />
+						<PlayButton />
 					</button>
 				)}{" "}
 				<button
@@ -104,18 +104,20 @@ const Pomodoro: React.FC<Props> = ({
 					}}
 					id="reset"
 				>
-					<img src={resetButton} alt="reset" />
+					<ResetButton />
 				</button>{" "}
 			</div>
-			{view ? (
-				<>
-					<p id="timer-label">Session</p> <Timer time={timeSec} />
-				</>
-			) : (
-				<>
-					<p id="timer-label">Break</p> <Timer time={breakSec} />
-				</>
-			)}
+			<div id="screen">
+				{view ? (
+					<>
+						<p id="timer-label">Session</p> <Timer time={timeSec} />
+					</>
+				) : (
+					<>
+						<p id="timer-label">Break</p> <Timer time={breakSec} />
+					</>
+				)}
+			</div>
 			<div id="controller">
 				<Controller
 					count={controlTime}

@@ -5,7 +5,6 @@ interface Props {
 
 const Timer: React.FC<Props> = ({ time }) => {
 	let a = time.map((number: number) => (number < 9 ? "0" + number : number));
-	console.log(a);
 	return (
 		<>
 			<div id="time-left">{a[0] + ":" + a[1]}</div>
