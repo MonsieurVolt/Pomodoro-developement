@@ -1,6 +1,23 @@
-import { DOWNTIME, RESET, UPTIME } from "./constants";
-
-function setTimeMinus(time: clock, minusSec: number, min: boolean): clock {
+import { actionController, actionTime, clock } from "../types";
+import {
+	DOWNBREAK,
+	DOWNTIME,
+	RESET,
+	DOWNTIMESEC,
+	DOWNBREAKSEC,
+	SETTIMESEC,
+	SETBREAKSEC,
+} from "./constants";
+function setControl(number: number, up: boolean): number {
+	if (number === 1 && !up) return 1;
+	else if (number === 60 && up) return 60;
+	return up ? number + 1 : number - 1;
+}
+function setTimeMinus(
+	time: number[],
+	minusSec: number,
+	min: boolean
+): number[] {
 	let lessSec = time[1] - minusSec;
 	time[1] = 0;
 	while (lessSec < 0) {
@@ -10,18 +27,84 @@ function setTimeMinus(time: clock, minusSec: number, min: boolean): clock {
 		} else return [0, 0];
 	}
 	time[1] += lessSec;
+	if (time[0] > 60 || (time[0] > 60 && time[1] > 0)) return [60, 0];
 	return time;
 }
+const initialeState: clock = {
+	breakTime: {
+		directTime: [5, 0],
+		controlTime: 5,
+	},
+	time: {
+		directTime: [25, 0],
+		controlTime: 25,
+	},
+};
 
-export const reducer = (state: clock = [25, 0], action: action) => {
-	console.log(state);
+export const reducer = (
+	state: clock = initialeState,
+	action: actionTime | actionController
+): clock => {
 	switch (action.type) {
 		case RESET:
-			return [25, 0];
+			return initialeState;
 		case DOWNTIME:
-			return [...setTimeMinus(state, action.sec, true)];
-		case UPTIME:
-			return [...setTimeMinus(state, action.sec, false)];
+			return {
+				...state,
+				time: {
+					...state.time,
+					controlTime: setControl(state.time.controlTime, action.up),
+				},
+			};
+		case DOWNBREAK:
+			return {
+				...state,
+				breakTime: {
+					...state.breakTime,
+					controlTime: setControl(state.breakTime.controlTime, action.up),
+				},
+			};
+		case DOWNBREAKSEC:
+			return {
+				...state,
+				breakTime: {
+					...state.breakTime,
+					directTime: [
+						...setTimeMinus(
+							state.breakTime.directTime,
+							action.sec,
+							action.up
+						),
+					],
+				},
+			};
+		case DOWNTIMESEC:
+			return {
+				...state,
+				time: {
+					...state.time,
+					directTime: [
+						...setTimeMinus(state.time.directTime, action.sec, action.up),
+					],
+				},
+			};
+		case SETTIMESEC:
+			console.log(state);
+			return {
+				...state,
+				time: {
+					...state.time,
+					directTime: [...action.set],
+				},
+			};
+		case SETBREAKSEC:
+			return {
+				...state,
+				breakTime: {
+					...state.breakTime,
+					directTime: [...action.set],
+				},
+			};
 		default:
 			return state;
 	}
