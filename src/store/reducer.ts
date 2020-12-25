@@ -47,7 +47,16 @@ export const reducer = (
 ): clock => {
 	switch (action.type) {
 		case RESET:
-			return initialeState;
+			return {
+				breakTime: {
+					directTime: [5, 0],
+					controlTime: 5,
+				},
+				time: {
+					directTime: [25, 0],
+					controlTime: 25,
+				},
+			};
 		case DOWNTIME:
 			return {
 				...state,

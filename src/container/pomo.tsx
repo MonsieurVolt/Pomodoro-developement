@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { mapDispatchToProps, mapStateToProps } from "../store/connectors";
+import Timer from "./Timer";
+import playButton from "./assets/play.svg";
+import pauseButton from "./assets/pause.svg";
+import resetButton from "./assets/reset.svg";
+import Controller from "./Controllers";
+
 type handle = (sec: number, up: boolean) => void;
 type handleSet = (set: number) => void;
 type handleControl = (up: boolean) => void;
@@ -16,6 +22,7 @@ interface Props {
 	downBreakSec: handle;
 	setBreakSec: handleSet;
 	setTimeSec: handleSet;
+	reset: () => void;
 }
 const Pomodoro: React.FC<Props> = ({
 	timeSec,
@@ -28,7 +35,9 @@ const Pomodoro: React.FC<Props> = ({
 	downTimeSec,
 	setBreakSec,
 	setTimeSec,
+	reset,
 }) => {
+	const audio: React.MutableRefObject<HTMLAudioElement> = useRef(null);
 	const [play, setPlay] = useState(false);
 	const [view, setView] = useState(true);
 	// handle the change of the controller for the breaker
@@ -44,16 +53,18 @@ const Pomodoro: React.FC<Props> = ({
 			view
 				? (a = window.setInterval(() => {
 						downTimeSec(1, true);
-				  }, 10))
+				  }, 1000))
 				: (a = window.setInterval(() => {
 						downBreakSec(1, true);
-				  }, 10));
+				  }, 1000));
 		}
 		if (!play) clearInterval(a);
 		if (sumArr(timeSec) === 0 && view) {
+			audio.current.play();
 			setView(false);
 			setBreakSec(controlBreak);
 		} else if (sumArr(breakSec) === 0 && !view) {
+			audio.current.play();
 			setView(true);
 			setTimeSec(controlTime);
 		}
@@ -72,17 +83,60 @@ const Pomodoro: React.FC<Props> = ({
 	]);
 	return (
 		<>
-			<p>
-				timer : {timeSec[0]} : {timeSec[1]}
-			</p>
-			<p>
-				breaker : {breakSec[0]} : {breakSec[1]}
-			</p>
-			<p>timer control : {controlTime}</p>
-			<p>breaker control : {controlBreak}</p>
-			<button onClick={() => downTime(false)}>down time</button>
-			<button onClick={() => downBreak(false)}>down break</button>
-			<button onClick={() => setPlay(!play)}>paly</button>
+			<p>Pomodoro Timer</p>
+			<div>
+				{play ? (
+					<button onClick={() => setPlay(false)} id="start_stop">
+						<img src={pauseButton} alt="pause" />
+					</button>
+				) : (
+					<button onClick={() => setPlay(true)} id="start_stop">
+						<img src={playButton} alt="play" />
+					</button>
+				)}{" "}
+				<button
+					onClick={() => {
+						audio.current.currentTime = 0;
+						audio.current.pause();
+						setPlay(false);
+						setView(true);
+						reset();
+					}}
+					id="reset"
+				>
+					<img src={resetButton} alt="reset" />
+				</button>{" "}
+			</div>
+			{view ? (
+				<>
+					<p id="timer-label">Session</p> <Timer time={timeSec} />
+				</>
+			) : (
+				<>
+					<p id="timer-label">Break</p> <Timer time={breakSec} />
+				</>
+			)}
+			<div id="controller">
+				<Controller
+					count={controlTime}
+					handleChange={downTime}
+					name="session"
+				>
+					<p id="session-label">Session length</p>
+				</Controller>
+				<Controller
+					count={controlBreak}
+					handleChange={downBreak}
+					name="break"
+				>
+					<p id="break-label">Break length</p>
+				</Controller>
+			</div>
+			<audio
+				id="beep"
+				src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+				ref={audio}
+			></audio>
 		</>
 	);
 };
